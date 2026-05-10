@@ -1,0 +1,28 @@
+Complexidade: 
+
+Adicionar — O(1)
+Sempre adiciona no fim do buffer, sem percorrer nada.
+
+Listar — O(n)
+Percorre todas as n pessoas uma vez.
+
+Buscar — O(n)
+Percorre todas as n pessoas (no pior caso).
+
+Remover — O(n)
+    Busca pela pessoa: O(n).
+    Percorre todas as n pessoas (no pior caso).
+
+    memmove para fechar o espaço: O(n)
+    Percorre as n pessoas a partir da pessoa excluída (no pior caso).
+
+Total: O(n)
+
+
+Dificuldades:
+
+Manipulação de ponteiros, principalmente quando envolve uma função que precisa usar ** ou quando o ponteiro precisa se mover ao longo do buffer.
+
+Erro de ponteiro quando realloc é usado, porque ele pode mudar o endereço onde o buffer está e eu não estava atribuindo novamente o ponteiro para apontar para o novo lugar. Em alguns casos funcionava, mas em outros apontava para algum lugar indefinido. 
+
+Deslocamento de pessoas: precisei pesquisar sobre deslocamento e aprender como funciona o memmove
