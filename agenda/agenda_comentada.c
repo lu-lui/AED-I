@@ -61,19 +61,19 @@ void Adicionar_Pessoa ( void **pBuffer ) {
     *pBuffer = (char *)realloc( *pBuffer, *ptr + strlen(temp) + 1 );//realloc p guardar nome
     ptr = (int*)*pBuffer + 2; //atribuir de novo porque realloc pode mudar lugar na memória
 
-    strcpy ( (char *)*pBuffer + *ptr, temp );
+    strcpy ( (char *)*pBuffer + *ptr, temp ); //copia para o espaço reservado a string guardada em temp, já com o tamanho certo
 
-    *ptr += strlen(temp) + 1; //avança 
+    *ptr += strlen(temp) + 1; //avança o tamanho da palavra, mais o caractere '\0'
     
-    free(temp);
+    free(temp); 
 
     *pBuffer = (int *)realloc( *pBuffer, *ptr + sizeof(int) );//realloc p guardar idade
-    ptr = (int*)*pBuffer + 2;
+    ptr = (int*)*pBuffer + 2; //realloc p arrumar ponteiro
     
     printf ("Idade: ");
-    scanf ( "%d", (int *)( (char *)*pBuffer + *ptr) ); //avança 1 byte de cada vez
+    scanf ( "%d", (int *)( (char *)*pBuffer + *ptr) ); //faz o casting de um ponteiro pra inteiro
  
-   *ptr += sizeof(int);
+   *ptr += sizeof(int); //avança o ponteiro
 
     printf ("Email: ");
     temp = (char *)malloc( 100 * sizeof(char) );
@@ -88,8 +88,8 @@ void Adicionar_Pessoa ( void **pBuffer ) {
 
     free(temp);
 
-    qtd = (int*)*pBuffer + 1;
-    (*qtd)++;
+    qtd = (int*)*pBuffer + 1; //atribui o endereço aqui, pois se atribuisse na hora da declaração, precisaria reatribuir valor cada vez que desse realloc, como esse ponteiro só é usado no final, seriam trechos de códigos desnecessários
+    (*qtd)++; //incrementa quantidade de pessoas
 }
 
 /*
@@ -111,36 +111,36 @@ void Remover_Pessoa ( void **pBuffer ) {
     scanf (" %99[^\n]", temp);
 
     while ( ptr < ptr_fim_agenda ) {
-        if ( strcmp( ptr, temp ) == 0 ) {
-            flag = ptr;
+        if ( strcmp( ptr, temp ) == 0 ) { //se achar a pessoa procurada
+            flag = ptr; //sinaliza que encontrou
 
-            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1;
-            ptr_fim_pessoa += sizeof(int);
-            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1;
+            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1; //avança nome
+            ptr_fim_pessoa += sizeof(int); //avança idade
+            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1; //avança email
 
-            memmove ( ptr, ptr_fim_pessoa, ptr_fim_agenda - ptr_fim_pessoa );
-            *pBuffer = (void *)realloc( *pBuffer, *( (int*)*pBuffer + 2 ) - ( ptr_fim_pessoa - ptr ) );
-            *( (int*)*pBuffer + 2 ) -= ( ptr_fim_pessoa - ptr );  
-            ptr_fim_agenda = (char*)*pBuffer + *( (int*)*pBuffer + 2 ); 
+            memmove ( ptr, ptr_fim_pessoa, ptr_fim_agenda - ptr_fim_pessoa ); //move o que estava após a pessoa para o lugar dela, excluindo a mesma da lista, sem deixar lacunos
+            *pBuffer = (void *)realloc( *pBuffer, *( (int*)*pBuffer + 2 ) - ( ptr_fim_pessoa - ptr ) );//realoca o tamanho do buffer para exluir o espaço antes ocupado por ela (agora esse espaço está no fim do buffer)
+            *( (int*)*pBuffer + 2 ) -= ( ptr_fim_pessoa - ptr );  //arruma ponteiro
+            ptr_fim_agenda = (char*)*pBuffer + *( (int*)*pBuffer + 2 ); //arruma ponteiro
 
-            qtd = (int*)*pBuffer + 1;
-            (*qtd)--;
+            qtd = (int*)*pBuffer + 1; //atribui local onde o conteudo do 
+            (*qtd)--; //decrementa quantidade
 
             printf ("Contato excluído com sucesso: \n");
 
             break;
         } else {
-            ptr += strlen(ptr) + 1;
+            ptr += strlen(ptr) + 1; //segue avançando ponteiros até encontrar a pessoa a ser excluida
             ptr += sizeof(int);
             ptr += strlen(ptr) + 1;
 
-            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1;
+            ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1; //segue avançando ponteiros até encontrar a pessoa a ser excluida
             ptr_fim_pessoa += sizeof(int);
             ptr_fim_pessoa += strlen(ptr_fim_pessoa) + 1;
         }    
     }    
     
-    if ( flag == NULL ) {
+    if ( flag == NULL ) { //se nada foi atribuído para a flag, nada foi encontrado
         printf ("O contato não está na agenda \n");
     }
         
@@ -172,7 +172,7 @@ void Buscar_Pessoa ( void *pBuffer ) {
             printf ("Contato encontrado: \n");
             printf ("Nome: %s \n", ptr);
             ptr += strlen(ptr) + 1;
-        
+            //após mostrar um dado da pessoa, avança e mostra o próximo
             printf ("Idade: %d \n", *(int *)ptr);
             ptr += sizeof(int);
 
@@ -181,7 +181,7 @@ void Buscar_Pessoa ( void *pBuffer ) {
 
             break;
         } else {
-            ptr += strlen(ptr) + 1;
+            ptr += strlen(ptr) + 1; //avança ponteiro
             ptr += sizeof(int);
             ptr += strlen(ptr) + 1;
         }    
@@ -215,7 +215,7 @@ void Listar_Todos ( void *pBuffer ) {
 
     printf ("Lista de contatos: \n");
     while (ptr < ptr_fim_agenda) {
-        printf ("Nome: %s \n", ptr);
+        printf ("Nome: %s \n", ptr); //mostra nome e avança ponteiro
         ptr += strlen(ptr) + 1;
     
         printf ("Idade: %d \n", *(int *)ptr);
@@ -233,7 +233,7 @@ Sair
 ====================
 */
 void Sair ( void *pBuffer ) {
-    free(pBuffer);
+    free(pBuffer); //libera memoria e encerra o programa
     printf ("Agenda encerrada, os contatos não foram salvos. \n");
     exit(0);
 }
