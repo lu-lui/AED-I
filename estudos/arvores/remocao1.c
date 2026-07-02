@@ -15,14 +15,17 @@ No* inserir(No *raiz, int valor);
 void imprimir(No *arvore);
 int tamanho(No *raiz);
 int buscar(No *raiz, int chave);
+No* buscarNO(No *raiz, int chave); //retorna
 No* remover(No *raiz,int chave);
+int altura(No *raiz);
+int alturaSubArvore(No* raiz, int chave);
 
 int main(){
     int op, valor;
     No *raiz = NULL;
     
     do{
-        printf("O - sair \n1 - inserir \n2 - imprimir \n3 - Buscar \n4- Remover \n5 - Altura\n");
+        printf("O - sair \n1 - inserir \n2 - imprimir \n3 - Buscar \n4- Remover \n5 - Altura \n6 - Altura subárvore\n");
         scanf("%d", &op);
 
         switch (op){
@@ -55,11 +58,15 @@ int main(){
             break;
 
         case 5:
-            printf("Digite um valor para remoção: ");
-            scanf("%d", &valor);
-            raiz = remover(raiz, valor);
+            printf("Altura da arvore: %d\n", altura(raiz));
             break;
-        
+
+        case 6:
+            printf("Digite um valor para cálculo de altura:\n ");
+            scanf("%d", &valor);
+            printf("Altura da arvore: %d\n", alturaSubArvore(raiz, valor));
+            break;
+
         default:
             printf("Opcao invalida\n");
             break;
@@ -161,3 +168,41 @@ No* remover(No *raiz,int chave){
 
 //para remover um nó de uma subarvore com filhos dos dois lados, ou vou para a esquerda e pego o filho mais a direita, ouvou para a direita e pego o filho mais a esquerda
 //assim teremos o nó que mais se aproxima do valor do nó excluído
+
+No* buscarNO(No *raiz, int chave){ //descobrir a altura de um nó
+    if (raiz == NULL){
+        return NULL; 
+    } else {
+        if (raiz->valor == chave)
+            return raiz; 
+        else {
+            if (chave < raiz->valor) 
+                return buscarNO(raiz->esquerda, chave);  
+            else
+                return buscarNO(raiz->direita, chave); 
+        }
+    }     
+}
+
+int altura(No *raiz){
+    //se raiz for nula ou folha
+    if (raiz == NULL)
+        return -1;
+
+    int esq = altura(raiz->esquerda);
+    int dir = altura(raiz->direita);
+    
+    //retorna o maior
+    if(esq > dir)
+        return esq + 1;
+    else
+        return dir + 1;
+}
+
+int alturaSubArvore(No* raiz, int chave){
+    No *no = buscarNO(raiz, chave);
+    if (no) //diferente de NULL
+        return altura(no);
+    else
+        return -1; 
+}
