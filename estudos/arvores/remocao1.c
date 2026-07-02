@@ -22,7 +22,7 @@ int main(){
     No *raiz = NULL;
     
     do{
-        printf("O - sair \n1 - inserir \n2 - imprimir \n3 - Buscar \n4- Remover\n");
+        printf("O - sair \n1 - inserir \n2 - imprimir \n3 - Buscar \n4- Remover \n5 - Altura\n");
         scanf("%d", &op);
 
         switch (op){
@@ -49,6 +49,12 @@ int main(){
             break;
 
         case 4:
+            printf("Digite um valor para remoção: ");
+            scanf("%d", &valor);
+            raiz = remover(raiz, valor);
+            break;
+
+        case 5:
             printf("Digite um valor para remoção: ");
             scanf("%d", &valor);
             raiz = remover(raiz, valor);
@@ -114,12 +120,34 @@ No* remover(No *raiz,int chave){
         printf("Valor não encontrado\n");
         return NULL; //esse null
     } else {
-        if(raiz->valor == chave){ //encontrou o valor na raiz (remoção para nós folha)
+        //encontrou o valor na raiz (remoção para nós folha)
+        if(raiz->valor == chave){ 
             if (raiz->esquerda == NULL && raiz->direita == NULL){
                 free(raiz);
                 return NULL;
-            }
-            
+            } else {
+                //remover nós que possuem 1 filho
+                //se um deles for nulo cai aqui, já foi testado se os dois são simultaneamente
+                if(raiz->esquerda == NULL || raiz->direita == NULL){ 
+                    No *temp; 
+                    if (raiz->esquerda != NULL)
+                        temp = raiz->esquerda;
+                    else
+                        temp = raiz->direita;
+
+                    free(raiz);
+                    return temp;
+                } else {
+                    //vai para a esquerda e pega o nó mais a direita
+                    No* temp = raiz->esquerda;
+                    while (temp->direita != NULL)
+                        temp = temp->direita; //avança o ponteiro mais a direita possível
+                    raiz->valor = temp->valor;
+                    temp->valor = chave; //quebre momentaneamente a regra de arvore binária (mesmo valor que tava na raiz->valor)
+                    raiz->esquerda = remover(raiz->esquerda, chave);
+                    return raiz;
+                }
+            }   
         } else {
             if (chave < raiz->valor) //não encontrou na raiz, se é menor, vai para a esquerda
                 raiz->esquerda = remover(raiz->esquerda, chave); //raiz->esquerda recebe o retorno NULL de remover
@@ -130,3 +158,6 @@ No* remover(No *raiz,int chave){
         }
     }
 }
+
+//para remover um nó de uma subarvore com filhos dos dois lados, ou vou para a esquerda e pego o filho mais a direita, ouvou para a direita e pego o filho mais a esquerda
+//assim teremos o nó que mais se aproxima do valor do nó excluído
