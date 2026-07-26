@@ -1,0 +1,7 @@
+// se a arvore for balanceada vai ter praticamente o mesmo tamanho na esquerda e na direta
+//criar uma funcao de contar nó para a esquerda e a direita
+//todos os nós da direita obrigatoriamente serão maiores que a raiz e os da esquerda
+//fazer uma operacao de multiplicacao para encontrar o valor
+//fazer um calculo de permutacao nos elementos da esquerda e outros no da direita e depois somar os dois
+//comparar a soma dos dois lados com a multiplicação de um lador por outro e retornar se o valor é o mesmo ou não
+// comparar com a raiz?

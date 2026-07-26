@@ -1,0 +1,21 @@
+-----Diferenças do editorial para meu código:-----
+
+Editorial: usa i % nums.length como parâmetro para o for.
+Meu: faz duas passagens separadas.
+
+Editorial: guarda só índices de nums e usa nums[stack.peek()] pra acessar o valor.
+Meu: valores e posições separadas para acessar o valor.
+
+Editorial: escreve o resultado na hora que empilha.
+Meu: escreve na hora que desempilha.
+
+
+-----Complexidade:-----
+
+O(n)
+
+Cada um dos n elementos é empilhado e desempilhado apenas uma vez.
+
+Todos os loops percorrem apenas uma vez cada elemento.
+
+Por mais que os elementos sejam percorridos duas vezes, isso é feito uma vez em cada loop.
